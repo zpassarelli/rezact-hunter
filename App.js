@@ -1,14 +1,32 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { NativeRouter, Route, AndroidBackButton } from 'react-router-native';
+import Splash from './components/splash';
+import Tutorial from './components/tutorial';
+import Main from './components/main';
+import Game from './components/game';
+import Result from './components/result';
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+
+    };
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app YO!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <NativeRouter>
+        <View style={styles.container}>
+          <AndroidBackButton />
+          <Route exact path="/" component={Splash} />
+          <Route path="/tutorial" component={Tutorial} />
+          <Route path="/main" component={Main} />
+          <Route path="/game" component={Game} />
+          <Route path="/result" component={Result} />
+        </View>
+      </NativeRouter>
     );
   }
 }
