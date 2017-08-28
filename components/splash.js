@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-native';
+import styles from '../styles';
 
 export default class Splash extends React.Component {
   constructor(props){
@@ -13,6 +14,7 @@ export default class Splash extends React.Component {
   render() {
     return(
       <View style={styles.container}>
+        <View style={{height:2}}></View>
         <View style={styles.logo}>
           <Text>Logo here</Text>
         </View>
@@ -23,7 +25,7 @@ export default class Splash extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity>
           <Link to="/tutorial" component={TouchableOpacity} style={styles.button}>
-            <Text style={{fontSize: 30, fontFamily: 'serif'}}>Tutorial</Text>
+            <Text style={{fontSize: 30, fontFamily: 'serif'}}>How to Play</Text>
           </Link>
         </TouchableOpacity>
       </View>
@@ -31,26 +33,3 @@ export default class Splash extends React.Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 5,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  logo: {
-    width: 300,
-    height: 300,
-    backgroundColor: 'grey'
-  },
-  button: {
-    height: 100,
-    width: 300,
-    backgroundColor: 'lime',
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});

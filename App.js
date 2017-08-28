@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { NativeRouter, Route, AndroidBackButton } from 'react-router-native';
+import styles from './styles';
 import Splash from './components/splash';
 import Tutorial from './components/tutorial';
 import Main from './components/main';
@@ -30,12 +31,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
