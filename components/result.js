@@ -1,5 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Link } from 'react-router-native';
+
+import styles from '../styles';
 
 export default class Result extends React.Component {
   constructor(props){

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-native';
+
 import styles from '../styles';
 
 export default class Splash extends React.Component {
@@ -18,14 +19,14 @@ export default class Splash extends React.Component {
         <View style={styles.logo}>
           <Text>Logo here</Text>
         </View>
-        <TouchableOpacity >
+        <TouchableOpacity>
           <Link to="/main" component={TouchableOpacity} style={styles.button}>
-            <Text style={{fontSize: 30, fontFamily: 'serif'}}>Start</Text>
+            <Text style={styles.buttonText}>Start</Text>
           </Link>
         </TouchableOpacity>
         <TouchableOpacity>
           <Link to="/tutorial" component={TouchableOpacity} style={styles.button}>
-            <Text style={{fontSize: 30, fontFamily: 'serif'}}>How to Play</Text>
+            <Text style={styles.buttonText}>How to Play</Text>
           </Link>
         </TouchableOpacity>
       </View>

@@ -1,5 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Link } from 'react-router-native';
+
+import styles from '../styles';
 
 export default class Game extends React.Component {
   constructor(props){
@@ -22,12 +25,3 @@ export default class Game extends React.Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

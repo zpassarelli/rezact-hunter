@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     borderRadius: 200
   },
   button: {
-    height: 100,
+    height: 80,
     width: 300,
     backgroundColor: 'lime',
     borderStyle: 'solid',
@@ -22,6 +22,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  buttonText: {
+    fontSize: 30,
+    fontFamily: 'serif'
+  },
+  pager: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 20,
   }
 });
 
