@@ -14,7 +14,7 @@ export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      gameRunning: false
+
     };
   }
 
@@ -26,8 +26,8 @@ export default class App extends React.Component {
           <Route exact path="/" component={Splash} />
           <Route path="/tutorial" component={Tutorial} />
           <Route path="/main" component={Main} />
-          <Route path="/game" component={Game} />
-          <Route path="/result" component={Result} />
+          <Route path="/game" render={({location})=><Game location={location}/>} />
+          <Route path="/result" render={({location})=><Result location={location}/>} />
         </View>
       </NativeRouter>
     );

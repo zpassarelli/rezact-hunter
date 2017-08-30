@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -7,14 +8,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   logo: {
-    width: 250,
-    height: 250,
-    backgroundColor: 'grey',
-    borderRadius: 200
+    width: width - 10,
+    height: width - 10,
+    backgroundColor: 'grey'
   },
   button: {
-    height: 80,
-    width: 300,
+    height: 60,
+    width: width - 30,
     backgroundColor: 'lime',
     borderStyle: 'solid',
     borderColor: 'black',
@@ -27,10 +27,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'serif'
   },
-  pager: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
+  tutorialText: {
+    fontSize: 24,
+    fontFamily: 'serif',
+    padding: 30,
+    width: width,
+    textAlign: 'center'
   }
 });
 
