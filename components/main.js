@@ -17,25 +17,25 @@ export default class Main extends React.Component {
         <View style={{flex:7, justifyContent:'space-around'}}>
 
           <TouchableOpacity>
-            <Link to="/game/extreme" component={TouchableOpacity} style={[styles.button,{backgroundColor:'crimson'}]}>
+            <Link to="/game/extreme" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'crimson'}]}>
               <Text style={[styles.buttonText,{color:'white'}]}>Extreme</Text>
             </Link>
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Link to="/game/hard" component={TouchableOpacity} style={[styles.button,{backgroundColor:'orange'}]}>
+            <Link to="/game/hard" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'orange'}]}>
               <Text style={styles.buttonText}>Hard</Text>
             </Link>
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Link to="/game/normal" component={TouchableOpacity} style={styles.button}>
+            <Link to="/game/normal" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'peachpuff'}]}>
               <Text style={styles.buttonText}>Normal</Text>
             </Link>
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Link to="/game/easy" component={TouchableOpacity} style={styles.button}>
+            <Link to="/game/easy" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'lightgreen'}]}>
               <Text style={styles.buttonText}>Easy</Text>
             </Link>
           </TouchableOpacity>

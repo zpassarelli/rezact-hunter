@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   button: {
     height: 60,
     width: width - 30,
-    backgroundColor: 'lime',
+    backgroundColor: 'lemonchiffon',
     borderStyle: 'solid',
     borderColor: 'black',
     borderWidth: 1,
@@ -33,6 +33,18 @@ const styles = StyleSheet.create({
     padding: 30,
     width: width,
     textAlign: 'center'
+  },
+  modal: {
+    backgroundColor: 'lemonchiffon',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginLeft: 15,
+    width: width - 30,
+    height: width
   }
 });
 

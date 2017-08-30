@@ -7,21 +7,18 @@ import styles from '../styles';
 export default class Result extends React.Component {
   constructor(props){
     super(props);
+    let result = JSON.stringify(props.location.pathname).slice(9,-1);
     this.state = {
-      victory: true
+      victory: result
     };
   }
 
-  componentDidMount(){
-    let newResult = JSON.stringify(this.props.location.pathname).slice(9,-1);
-    if(newResult === 'lose') this.setState({victory: false});
-  }
   render() {
     return(
       <View style={styles.container}>
         <View style={{flex:4, paddingTop:30}}>
 
-          <Text style={styles.tutorialText}>{this.state.victory ? 'Victory!' : 'Defeat.'}</Text>
+          <Text style={styles.tutorialText}>{this.state.victory === 'win' ? 'Victory!' : 'Defeat.'}</Text>
 
         </View>
 

@@ -1,46 +1,73 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import { Link } from 'react-router-native';
+import { Alert, BackHandler, Modal, Text, View, TouchableOpacity } from 'react-native';
+import { Link, Redirect } from 'react-router-native';
 
 import styles from '../styles';
+
+import Info from './game_components/info';
 
 export default class Game extends React.Component {
   constructor(props){
     super(props);
+    let difficulty = JSON.stringify(props.location.pathname).slice(7,-1);
     this.state = {
-      diff: 'default'
+      difficulty: difficulty,
+      info: true,
+      redirect: ''
     };
   }
 
-  componentDidMount(){
-    let newDiff = JSON.stringify(this.props.location.pathname).slice(7,-1);
-    this.setState({diff: newDiff});
+  retreat = () => {
+    Alert.alert(
+      'Retreat',
+      'Are you sure you want to quit?',
+      [
+        {text: 'Hold up', onPress: ()=>{} },
+        {text: 'Yes!', onPress: ()=> this.setState({redirect: 'home'})}
+      ]
+    )
+  }
+
+  componentWillUnmount() {
+    alert("Game unmount");
   }
 
   render() {
-    return(
+    if(this.state.redirect === 'home'){
+      return <Redirect to='/' />
+    } else if (this.state.redirect === 'win') {
+      return <Redirect to='/result/win' />
+    } else if (this.state.redirect === 'lose') {
+      return <Redirect to='/result/lose' />
+    } else {
+      return (
       <View style={styles.container}>
         <View style={{flex:4, paddingTop:30}}>
+          <Modal
+            animationType={"fade"}
+            transparent={true}
+            visible={this.state.info}
+            onRequestClose={()=>this.setState({info:false})}
+            >
+            <TouchableOpacity onPress={()=>this.setState({info: false})}>
+              <View style={styles.modal}>
+                <Text>Hello?</Text>
+              </View>
+            </TouchableOpacity>
+          </Modal>
 
-          <Text>Game is {this.state.diff}</Text>
-          <TouchableOpacity>
-            <Link to="/result/lose" replace component={TouchableOpacity} style={styles.button}>
-              <Text style={styles.buttonText}>Defeat</Text>
-            </Link>
-          </TouchableOpacity>
 
         </View>
 
         <View style={{flex:1, justifyContent:'center'}}>
 
-          <TouchableOpacity>
-            <Link to="/result/win" replace component={TouchableOpacity} style={styles.button}>
-              <Text style={styles.buttonText}>Victory</Text>
-            </Link>
+          <TouchableOpacity style={styles.button} onPress={(event)=> this.retreat(event)}>
+              <Text style={styles.buttonText}>Retreat</Text>
           </TouchableOpacity>
 
         </View>
       </View>
-    )
+      )
+    }
   }
 }
