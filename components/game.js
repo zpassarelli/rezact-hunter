@@ -27,7 +27,7 @@ export default class Game extends React.Component {
       playerType: 0,
       playerHp: 4,
 
-      enemyType: Math.floor(Math.random(1,3)) * difficulty,
+      enemyType: (Math.floor(Math.random()*3) + 1) * difficulty,
       enemyHp: 100 * difficulty,
 
       redirect: ''
@@ -71,6 +71,10 @@ export default class Game extends React.Component {
     )
   }
 
+  componentWillMount() {
+    this.props.changeBg(this.state.difficulty);
+  }
+
   componentWillUnmount() {
     clearInterval(this.statusTimer);
   }
@@ -88,7 +92,7 @@ export default class Game extends React.Component {
 
         <Info show={this.state.info.show} type={this.state.info.type} close={this.closeInfo} />
         {this.state.status.show ? (
-          <Text style={styles.statusText}>{this.state.status.type}</Text>
+          <Text style={[styles.statusText,{textShadowColor: this.state.status.color}]}>{this.state.status.type}</Text>
         ) : null}
 
 
@@ -102,7 +106,7 @@ export default class Game extends React.Component {
 
         <View style={{flex:2}}>
 
-          <TouchableOpacity style={styles.tapArea}>
+          <TouchableOpacity activeOpacity={0.7} style={styles.tapArea}>
             <Text>Tap area</Text>
           </TouchableOpacity>
 
@@ -110,8 +114,7 @@ export default class Game extends React.Component {
 
         <View style={{flex:1, justifyContent:'center'}}>
 
-          <TouchableOpacity style={styles.button} onPress={()=> this.showStatus('test')}
-            onLongPress={()=>this.showInfo(this.state)}>
+          <TouchableOpacity style={styles.button} onPress={()=>this.retreat()}>
               <Text style={styles.buttonText}>Retreat</Text>
           </TouchableOpacity>
 

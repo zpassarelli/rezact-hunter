@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-const { width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -7,10 +7,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
+  bg: {
+    zIndex:0,
+    height: height,
+    resizeMode: 'contain',
+    position:'absolute'
+  },
   logo: {
     width: width - 10,
-    height: width - 10,
-    backgroundColor: 'grey'
+    height: width - 10
   },
   button: {
     height: 60,
@@ -53,7 +58,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'serif',
     padding: 30,
-    width: width,
+    width: width - 30,
+    margin: 15,
+    backgroundColor: 'lemonchiffon',
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
+    justifyContent: 'center',
     textAlign: 'center'
   },
   modal: {
