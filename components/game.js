@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, BackHandler, Modal, Text, View, TouchableOpacity } from 'react-native';
+import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import { Link, Redirect } from 'react-router-native';
 
 import styles from '../styles';
@@ -9,12 +9,55 @@ import Info from './game_components/info';
 export default class Game extends React.Component {
   constructor(props){
     super(props);
-    let difficulty = JSON.stringify(props.location.pathname).slice(7,-1);
+    let difficulty = Number(JSON.stringify(props.location.pathname).slice(7,-1));
+    this.statusTimer = null;
     this.state = {
       difficulty: difficulty,
-      info: true,
+      info: {
+        show: false,
+        type: 'default'
+      },
+      status: {
+        show: false,
+        type: 'default',
+        color: 'red'
+      },
+      damage: 0,
+
+      playerType: 0,
+      playerHp: 4,
+
+      enemyType: Math.floor(Math.random(1,3)) * difficulty,
+      enemyHp: 100 * difficulty,
+
       redirect: ''
     };
+  }
+
+  showInfo = (type) => {
+    let newInfo = {
+      show: true,
+      type: type
+    };
+    this.setState({info: newInfo});
+  }
+
+  closeInfo = () => {
+    this.setState({info:{show: false}});
+  }
+
+  showStatus = (type, color) => {
+    clearInterval(this.statusTimer);
+    let newStatus = {
+      show: true,
+      type: type,
+      color: color
+    };
+    this.setState({status: newStatus},this.closeStatus());
+  }
+
+  closeStatus = () => {
+    this.statusTimer = window.setTimeout(()=>this.setState({status:{show:false}}),3000);
   }
 
   retreat = () => {
@@ -29,7 +72,7 @@ export default class Game extends React.Component {
   }
 
   componentWillUnmount() {
-    alert("Game unmount");
+    clearInterval(this.statusTimer);
   }
 
   render() {
@@ -42,26 +85,33 @@ export default class Game extends React.Component {
     } else {
       return (
       <View style={styles.container}>
-        <View style={{flex:4, paddingTop:30}}>
-          <Modal
-            animationType={"fade"}
-            transparent={true}
-            visible={this.state.info}
-            onRequestClose={()=>this.setState({info:false})}
-            >
-            <TouchableOpacity onPress={()=>this.setState({info: false})}>
-              <View style={styles.modal}>
-                <Text>Hello?</Text>
-              </View>
-            </TouchableOpacity>
-          </Modal>
 
+        <Info show={this.state.info.show} type={this.state.info.type} close={this.closeInfo} />
+        {this.state.status.show ? (
+          <Text style={styles.statusText}>{this.state.status.type}</Text>
+        ) : null}
+
+
+        <View style={{flex:2, paddingTop:30}}>
+
+          <View style={styles.container}>
+            <Text>Field</Text>
+          </View>
+
+        </View>
+
+        <View style={{flex:2}}>
+
+          <TouchableOpacity style={styles.tapArea}>
+            <Text>Tap area</Text>
+          </TouchableOpacity>
 
         </View>
 
         <View style={{flex:1, justifyContent:'center'}}>
 
-          <TouchableOpacity style={styles.button} onPress={(event)=> this.retreat(event)}>
+          <TouchableOpacity style={styles.button} onPress={()=> this.showStatus('test')}
+            onLongPress={()=>this.showInfo(this.state)}>
               <Text style={styles.buttonText}>Retreat</Text>
           </TouchableOpacity>
 
