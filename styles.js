@@ -15,7 +15,19 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width - 10,
-    height: width - 10
+    height: width - 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  logoText: {
+    textAlign: 'center',
+    fontSize: 60,
+    fontFamily: 'serif',
+    fontWeight: 'bold',
+    color: 'cyan',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 10
   },
   button: {
     height: 60,
@@ -43,6 +55,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'serif'
   },
+  shadow: {
+    textShadowColor: 'black',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 10
+  },
   statusText: {
     position: 'absolute',
     marginTop: 20,
@@ -51,6 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: 'serif',
     fontStyle: 'italic',
+    textShadowColor: 'black',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 10
   },
