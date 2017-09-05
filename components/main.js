@@ -10,7 +10,7 @@ export default class Main extends React.Component {
       <View style={styles.container}>
         <View style={{flex:1, paddingTop:30}}>
 
-          <Text style={styles.buttonText}>Select a difficulty</Text>
+          <Text style={[styles.buttonText,styles.shadow,{color:'white'}]}>Select a difficulty</Text>
 
         </View>
 
