@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lemonchiffon',
     borderStyle: 'solid',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: 3,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lemonchiffon',
     borderStyle: 'solid',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: 3,
     borderRadius: 10,
     justifyContent: 'center',
     textAlign: 'center'
@@ -92,12 +92,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderStyle: 'solid',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: 3,
     borderRadius: 10,
     marginLeft: 15,
-    marginTop: 70,
+    marginTop: height/2 - 70,
     width: width - 30,
-    height: width - 60
+    height: height/2 - 50
   }
 });
 
