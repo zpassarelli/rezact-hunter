@@ -22,6 +22,7 @@ export default class Enemy extends React.Component {
   constructor(props) {
     super(props);
     this.springValue = new Animated.Value(0.2);
+    this.squishValue = new Animated.Value(1);
   }
 
   spring = () => {
@@ -34,14 +35,50 @@ export default class Enemy extends React.Component {
     }).start();
   }
 
+  attack = () => {
+    this.springValue.setValue(1.2);
+    Animated.sequence([
+      Animated.timing(this.springValue, {
+        toValue: 3,
+        useNativeDriver: true
+      }),
+      Animated.timing(this.springValue, {
+        toValue: 1.2,
+        useNativeDriver: true
+      })
+    ]).start(()=>this.props.resetEnemyAnim());
+  }
+
+  dmg = () => {
+    this.squishValue.setValue(1);
+    Animated.timing(this.squishValue, {
+        toValue: 2,
+        useNativeDriver: true
+    }).start(()=>{
+      this.squishValue.setValue(1);
+      this.props.resetEnemyAnim();
+    });
+  }
+
   componentDidMount(){
     this.spring();
   }
 
+  componentDidUpdate() {
+    if(this.props.enemyAnim === 'attack'){
+      this.attack();
+
+    } else if (this.props.enemyAnim === 'dmg'){
+      this.dmg();
+    }
+  }
+
   render() {
     return (
-      <Animated.Image source={MON_IMG[this.props.enemyType - 1]} style={{transform:[{scale:this.springValue}]}}>
-
+      <Animated.Image
+        source={MON_IMG[this.props.enemyType - 1]}
+        style={{transform:[{scale:this.springValue},{scaleX:this.squishValue}]}}
+      >
       </Animated.Image>
     )
   }
