@@ -23,13 +23,13 @@ export default class Main extends React.Component {
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Link to="/game/3" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'orange'}]}>
+            <Link to="/game/3" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'darkorange'}]}>
               <Text style={styles.buttonText}>Hard</Text>
             </Link>
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Link to="/game/2" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'peachpuff'}]}>
+            <Link to="/game/2" replace component={TouchableOpacity} style={[styles.button,{backgroundColor:'gold'}]}>
               <Text style={styles.buttonText}>Normal</Text>
             </Link>
           </TouchableOpacity>
