@@ -59,9 +59,13 @@ export default class Enemy extends React.Component {
       Animated.timing(this.squishValue, {
         toValue: 1,
         duration: 100,
+        delay: 500,
         useNativeDriver: true
       })
-    ]).start(()=>this.props.requestAnim('enemy',''));
+    ]).start(()=>{
+      this.props.requestAnim('enemy','')
+      this.props.requestAnim('player','unattack',this.props.playerInd);
+    });
   }
 
   componentDidMount(){
