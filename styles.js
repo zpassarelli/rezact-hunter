@@ -7,6 +7,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
+  field: {
+    width: width - 30,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   bg: {
     zIndex:0,
     height: height,
