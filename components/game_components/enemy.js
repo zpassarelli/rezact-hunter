@@ -46,18 +46,22 @@ export default class Enemy extends React.Component {
         toValue: 1.2,
         useNativeDriver: true
       })
-    ]).start(()=>this.props.resetEnemyAnim());
+    ]).start(()=>this.props.requestAnim('enemy',''));
   }
 
   dmg = () => {
     this.squishValue.setValue(1);
-    Animated.timing(this.squishValue, {
+    Animated.sequence([
+      Animated.timing(this.squishValue, {
         toValue: 2,
         useNativeDriver: true
-    }).start(()=>{
-      this.squishValue.setValue(1);
-      this.props.resetEnemyAnim();
-    });
+      }),
+      Animated.timing(this.squishValue, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true
+      })
+    ]).start(()=>this.props.requestAnim('enemy',''));
   }
 
   componentDidMount(){
