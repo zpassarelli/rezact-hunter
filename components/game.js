@@ -5,6 +5,8 @@ import { Link, Redirect } from 'react-router-native';
 import styles from '../styles';
 
 import Info from './game_components/info';
+import Progress from './game_components/progress';
+import Player from './game_components/player';
 import Enemy from './game_components/enemy';
 
 const MAX_DMG = 25;
@@ -17,7 +19,7 @@ export default class Game extends React.Component {
     this.currentPlayer = 0;
     this.difficulty = Number(JSON.stringify(props.location.pathname).slice(7,-1));
     this.enemyType = (Math.floor(Math.random()*3) + 1) + (3 * (this.difficulty - 1));
-    let enemyHp = 100 * this.difficulty;
+    this.enemyHp = 100 * this.difficulty;
     // this.statusTimer = null;
     this.state = {
       info: {
@@ -32,10 +34,12 @@ export default class Game extends React.Component {
 
       action: false,
 
-      playerType: ['player A','player B','player C','player D'],
       playerHp: 4,
+      enemyHp: this.enemyHp,
 
-      enemyHp: enemyHp,
+      playerType: ['player A','player B','player C','player D'],
+
+      playerAnim: ['','','',''],
       enemyAnim: '',
 
       redirect: ''
@@ -87,6 +91,7 @@ export default class Game extends React.Component {
       this.phase = 0;
       this.showInfo(this.state.playerType[this.currentPlayer]);
       this.showStatus('go, '+ this.state.playerType[this.currentPlayer], 'white');
+      this.requestAnim('player','attack',this.currentPlayer);
       this.phase = 2;
       return;
     }
@@ -98,11 +103,13 @@ export default class Game extends React.Component {
     }
     if(this.phase === 3) { //player action resolution
       this.phase = 0;
+      this.requestAnim('enemy','dmg');
       //this.dealDamage();
       this.setState(prevState => {
-        return {enemyHp: prevState.enemyHp - PART_DMG, enemyAnim: 'dmg'};
+        return {enemyHp: prevState.enemyHp - PART_DMG};
       });
       this.showStatus('dmg','white');
+      this.requestAnim('player','unattack',this.currentPlayer);
       this.currentPlayer++;
       if(this.currentPlayer + 1 > this.state.playerHp){
         this.currentPlayer = 0;
@@ -127,18 +134,30 @@ export default class Game extends React.Component {
     }
     if(this.phase === 6) { //player defense resolution
       this.phase = 0;
+      this.requestAnim('enemy','attack');
       //this.takeDamage();
       this.setState(prevState => {
-        return {playerHp: prevState.playerHp - 1, enemyAnim: 'attack'};
+        return {
+          playerHp: prevState.playerHp - 1,
+          playerType: prevState.playerType.slice(0,-1)
+        };
       });
+
       this.showStatus('took dmg','white');
       this.phase = 1;
       return;
     }
   }
 
-  resetEnemyAnim = () => {
-    this.setState({enemyAnim: ''});
+  requestAnim = (who, type, playerNum) => {
+    if(who === 'player'){
+      let newAnim = ['','','',''];
+      newAnim[playerNum] = type;
+      this.setState({playerAnim: newAnim});
+    }
+    else if(who === 'enemy'){
+      this.setState({enemyAnim: type});
+    }
   }
 
   playerWin = (win) => {
@@ -180,27 +199,30 @@ export default class Game extends React.Component {
       return (
       <View style={styles.container}>
 
-
-
         {this.state.status.show ? (
           <Text style={[styles.statusText,{color: this.state.status.color}]}>{this.state.status.type}</Text>
         ) : null}
 
+        <View style={[styles.field,{flex:1, paddingTop: 80}]}>
 
-        <View style={{flex:2, paddingTop:30}}>
-
-          <View style={styles.container}>
-            <Text style={{fontSize:30}}>
-              Phase: {this.phase}
-              Player HP: {this.state.playerHp}
-              Enemy HP: {this.state.enemyHp}
-            </Text>
-            <Enemy enemyType={this.enemyType} enemyAnim={this.state.enemyAnim} resetEnemyAnim={this.resetEnemyAnim} />
-          </View>
+            <Progress hp={this.state.playerHp} maxhp={4} />
+            <Progress hp={this.state.enemyHp} maxhp={this.enemyHp} />
 
         </View>
 
-        <View style={{flex:2}}>
+        <View style={[styles.field,{flex:3}]}>
+
+            <View style={{flex:1, flexWrap: 'wrap', alignSelf: 'flex-start', marginLeft: 10}}>
+              {this.state.playerType.map((player, ind) => <Player key={ind} playerType={player} playerInd={ind} playerAnim={this.state.playerAnim[ind]} requestAnim={this.requestAnim} /> )}
+            </View>
+
+            <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+              <Enemy enemyType={this.enemyType} enemyAnim={this.state.enemyAnim} requestAnim={this.requestAnim} />
+            </View>
+
+        </View>
+
+        <View style={{flex:4}}>
 
           <Info show={this.state.info.show} type={this.state.info.type} close={this.closeInfo} />
 
@@ -208,7 +230,7 @@ export default class Game extends React.Component {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.tapArea}
-              onLongPress={()=>this.setState({action: false})} >
+              onPress={()=>this.setState({action: false})} >
 
             </TouchableOpacity>
           ) : (
@@ -222,7 +244,7 @@ export default class Game extends React.Component {
 
         </View>
 
-        <View style={{flex:1, justifyContent:'center'}}>
+        <View style={{flex:2, justifyContent:'center'}}>
 
           <TouchableOpacity style={styles.button} onPress={()=>this.retreat()}>
               <Text style={styles.buttonText}>Retreat</Text>
