@@ -12,15 +12,29 @@ import Enemy from './game_components/enemy';
 const MAX_DMG = 25;
 const PART_DMG = 15;
 
+const CHARS = ['Knight', 'Archer', 'Mage', 'Spearman'];
+
 export default class Game extends React.Component {
   constructor(props){
     super(props);
+
     this.phase = 0;
     this.currentPlayer = 0;
+
     this.difficulty = Number(JSON.stringify(props.location.pathname).slice(7,-1));
-    this.enemyType = (Math.floor(Math.random()*3) + 1) + (3 * (this.difficulty - 1));
+
+    let type = [0,1,2,3];
+    for(let swap, temp, i = type.length - 1; i; i--){
+      swap = parseInt(Math.random()*i);
+      temp = type[i];
+      type[i] = type[swap];
+      type[swap] = temp;
+    }
+
+    this.enemyType = (parseInt(Math.random()*3) + 1) + (3 * (this.difficulty - 1));
+    if(this.difficulty === 5) this.enemyType = 13;
     this.enemyHp = 100 * this.difficulty;
-    // this.statusTimer = null;
+
     this.state = {
       info: {
         show: false,
@@ -37,7 +51,7 @@ export default class Game extends React.Component {
       playerHp: 4,
       enemyHp: this.enemyHp,
 
-      playerType: ['player A','player B','player C','player D'],
+      playerType: [CHARS[type[0]],CHARS[type[1]],CHARS[type[2]],CHARS[type[3]]],
 
       playerAnim: ['','','',''],
       enemyAnim: '',
@@ -69,8 +83,33 @@ export default class Game extends React.Component {
   }
 
   closeStatus = () => {
-    // this.statusTimer = window.setTimeout(()=>this.setState({status:{show:false}}),4000);
     this.setState({status:{show:false}});
+  }
+
+  dealDamage = () => {
+    this.requestAnim('enemy','dmg');
+    this.showStatus('deal dmg','white');
+    this.setState(prevState => {
+      if(prevState.enemyHp > PART_DMG){
+        return {enemyHp: prevState.enemyHp - PART_DMG};
+      } else {
+        return {enemyHp: 0};
+      }
+    });
+  }
+
+  takeDamage = () => {
+    this.requestAnim('enemy','attack');
+
+    this.showStatus('took dmg','white');
+    this.setState(prevState => {
+      return {
+        playerHp: prevState.playerHp - 1,
+        playerType: prevState.playerType.slice(0,-1)
+      };
+    });
+
+
   }
 
   advance = () => {
@@ -78,41 +117,41 @@ export default class Game extends React.Component {
     this.closeStatus();
     if(this.state.playerHp === 0){ //player defeat condition
       this.phase = 0;
+
       this.playerWin(false);
       return;
     }
     if(this.state.enemyHp <= 0){ //player win condition
       this.phase = 0;
+
       this.playerWin(true);
       return;
     }
 
     if(this.phase === 1) { //player mechanic intro
       this.phase = 0;
+
       this.showInfo(this.state.playerType[this.currentPlayer]);
       this.showStatus('go, '+ this.state.playerType[this.currentPlayer], 'white');
+
       this.requestAnim('player','attack',this.currentPlayer);
+
       this.phase = 2;
       return;
     }
     if(this.phase === 2) { //player action begins
       this.phase = 0;
+
       this.setState({action: true});
+
       this.phase = 3;
       return;
     }
     if(this.phase === 3) { //player action resolution
       this.phase = 0;
-      this.requestAnim('enemy','dmg');
-      //this.dealDamage();
-      this.setState(prevState => {
-        if(prevState.enemyHp > PART_DMG){
-          return {enemyHp: prevState.enemyHp - PART_DMG};
-        } else {
-          return {enemyHp: 0};
-        }
-      });
-      this.showStatus('dmg','white');
+
+      this.dealDamage();
+
       this.currentPlayer++;
       if(this.currentPlayer + 1 > this.state.playerHp){
         this.phase = 4;
@@ -123,29 +162,26 @@ export default class Game extends React.Component {
     }
     if(this.phase === 4) { //player defense intro
       this.phase = 0;
+
       this.showStatus('incoming','red');
       this.showInfo('defend this bro');
+
       this.phase = 5;
       return;
     }
     if(this.phase === 5) { //player defense begins
       this.phase = 0;
+
       this.setState({action: true});
+
       this.phase = 6;
       return;
     }
     if(this.phase === 6) { //player defense resolution
       this.phase = 0;
-      this.requestAnim('enemy','attack');
-      //this.takeDamage();
-      this.setState(prevState => {
-        return {
-          playerHp: prevState.playerHp - 1,
-          playerType: prevState.playerType.slice(0,-1)
-        };
-      });
 
-      this.showStatus('took dmg','white');
+      this.takeDamage();
+
       this.currentPlayer = 0;
       this.phase = 1;
       return;
