@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: 'lemonchiffon',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderStyle: 'solid',
     borderColor: 'black',
@@ -103,6 +103,11 @@ const styles = StyleSheet.create({
     marginTop: height/2 - 70,
     width: width - 30,
     height: height/2 - 50
+  },
+  mech: {
+    position: 'absolute',
+    top: height,
+    left: width/2
   }
 });
 
