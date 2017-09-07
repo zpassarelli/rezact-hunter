@@ -15,7 +15,8 @@ const MON_IMG = [
   require('../../media/mon/9.png'),
   require('../../media/mon/10.png'),
   require('../../media/mon/11.png'),
-  require('../../media/mon/12.png')
+  require('../../media/mon/12.png'),
+  require('../../media/mon/chicken.gif')
 ]
 
 export default class Enemy extends React.Component {
