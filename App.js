@@ -19,6 +19,7 @@ export default class App extends React.Component {
   }
 
   changeBg = (bg) => {
+    if(bg == 5) bg = 1;
     this.setState({bg: bg});
   }
 
