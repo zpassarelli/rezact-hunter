@@ -81,7 +81,7 @@ export default class Game extends React.Component {
       this.playerWin(false);
       return;
     }
-    if(this.state.enemyHp === 0){ //player win condition
+    if(this.state.enemyHp <= 0){ //player win condition
       this.phase = 0;
       this.playerWin(true);
       return;
@@ -106,13 +106,15 @@ export default class Game extends React.Component {
       this.requestAnim('enemy','dmg');
       //this.dealDamage();
       this.setState(prevState => {
-        return {enemyHp: prevState.enemyHp - PART_DMG};
+        if(prevState.enemyHp > PART_DMG){
+          return {enemyHp: prevState.enemyHp - PART_DMG};
+        } else {
+          return {enemyHp: 0};
+        }
       });
       this.showStatus('dmg','white');
-      this.requestAnim('player','unattack',this.currentPlayer);
       this.currentPlayer++;
       if(this.currentPlayer + 1 > this.state.playerHp){
-        this.currentPlayer = 0;
         this.phase = 4;
       } else {
         this.phase = 1;
@@ -144,6 +146,7 @@ export default class Game extends React.Component {
       });
 
       this.showStatus('took dmg','white');
+      this.currentPlayer = 0;
       this.phase = 1;
       return;
     }
@@ -217,7 +220,7 @@ export default class Game extends React.Component {
             </View>
 
             <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-              <Enemy enemyType={this.enemyType} enemyAnim={this.state.enemyAnim} requestAnim={this.requestAnim} />
+              <Enemy enemyType={this.enemyType} enemyAnim={this.state.enemyAnim} playerInd={this.currentPlayer - 1} requestAnim={this.requestAnim} />
             </View>
 
         </View>
