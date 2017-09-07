@@ -6,6 +6,7 @@ import styles from '../styles';
 
 import Info from './game_components/info';
 import Progress from './game_components/progress';
+import Mech from './game_components/mech';
 import Player from './game_components/player';
 import Enemy from './game_components/enemy';
 
@@ -46,7 +47,7 @@ export default class Game extends React.Component {
         color: 'red'
       },
 
-      action: false,
+      action: '',
 
       playerHp: 4,
       enemyHp: this.enemyHp,
@@ -73,7 +74,6 @@ export default class Game extends React.Component {
   }
 
   showStatus = (type, color) => {
-    clearInterval(this.statusTimer);
     let newStatus = {
       show: true,
       type: type,
@@ -86,33 +86,45 @@ export default class Game extends React.Component {
     this.setState({status:{show:false}});
   }
 
-  dealDamage = () => {
-    this.requestAnim('enemy','dmg');
-    this.showStatus('deal dmg','white');
-    this.setState(prevState => {
-      if(prevState.enemyHp > PART_DMG){
-        return {enemyHp: prevState.enemyHp - PART_DMG};
-      } else {
-        return {enemyHp: 0};
-      }
-    });
+  toggleMech = (mech) => {
+    this.setState({action: mech})
   }
 
-  takeDamage = () => {
-    this.requestAnim('enemy','attack');
+  dealDamage = (grade) => {
+    let damage = 0;
+    if(grade === 'great'){
+      damage = MAX_DMG;
+    }
+    else if(grade === 'good'){
+      damage = PART_DMG;
+    }
 
-    this.showStatus('took dmg','white');
-    this.setState(prevState => {
-      return {
-        playerHp: prevState.playerHp - 1,
-        playerType: prevState.playerType.slice(0,-1)
-      };
-    });
+    if(damage > this.state.enemyHp){
+      damage = this.state.enemyHp;
+    }
 
-
+    this.setState({enemyHp: this.state.enemyHp - damage});
   }
 
-  advance = () => {
+  takeDamage = (grade) => {
+    let damage = 0;
+    let playerArr = this.state.playerType;
+    if(grade === 'fail'){
+      damage = 1;
+      playerArr = playerArr.slice(0,-1);
+    }
+    else if(this.difficulty === 5){
+      damage = 4;
+      playerArr = [];
+    }
+
+    this.setState({
+        playerHp: this.state.playerHp - damage,
+        playerType: playerArr
+      });
+  }
+
+  advance = (detail) => {
     if(this.phase === 0) return; //no action
     this.closeStatus();
     if(this.state.playerHp === 0){ //player defeat condition
@@ -131,10 +143,9 @@ export default class Game extends React.Component {
     if(this.phase === 1) { //player mechanic intro
       this.phase = 0;
 
+      this.requestAnim('player','attack',this.currentPlayer);
       this.showInfo(this.state.playerType[this.currentPlayer]);
       this.showStatus('go, '+ this.state.playerType[this.currentPlayer], 'white');
-
-      this.requestAnim('player','attack',this.currentPlayer);
 
       this.phase = 2;
       return;
@@ -142,7 +153,7 @@ export default class Game extends React.Component {
     if(this.phase === 2) { //player action begins
       this.phase = 0;
 
-      this.setState({action: true});
+      this.toggleMech(this.state.playerType[this.currentPlayer]);
 
       this.phase = 3;
       return;
@@ -150,7 +161,18 @@ export default class Game extends React.Component {
     if(this.phase === 3) { //player action resolution
       this.phase = 0;
 
-      this.dealDamage();
+      this.toggleMech('');
+      this.dealDamage(detail);
+      this.requestAnim('enemy','dmg');
+      if(detail === 'good'){
+        this.showStatus('good!','skyblue');
+      }
+      else if (detail === 'great'){
+        this.showStatus('great!!','lime');
+      }
+      else if (detail === 'miss'){
+        this.showStatus('miss', 'grey');
+      }
 
       this.currentPlayer++;
       if(this.currentPlayer + 1 > this.state.playerHp){
@@ -163,8 +185,8 @@ export default class Game extends React.Component {
     if(this.phase === 4) { //player defense intro
       this.phase = 0;
 
-      this.showStatus('incoming','red');
-      this.showInfo('defend this bro');
+      this.showStatus('incoming..','red');
+      this.showInfo('defense' + this.difficulty);
 
       this.phase = 5;
       return;
@@ -172,7 +194,7 @@ export default class Game extends React.Component {
     if(this.phase === 5) { //player defense begins
       this.phase = 0;
 
-      this.setState({action: true});
+      this.toggleMech('defense' + this.difficulty);
 
       this.phase = 6;
       return;
@@ -180,7 +202,18 @@ export default class Game extends React.Component {
     if(this.phase === 6) { //player defense resolution
       this.phase = 0;
 
-      this.takeDamage();
+      this.toggleMech('');
+      this.takeDamage(detail);
+      this.requestAnim('enemy','attack');
+      if(this.difficulty === 5){
+        this.showStatus('braawwk!!','red');
+      }
+      else if (detail === 'perfect'){
+        this.showStatus('perfect defense!','gold');
+      }
+      else if (detail === 'fail'){
+        this.showStatus('oh no', 'red');
+      }
 
       this.currentPlayer = 0;
       this.phase = 1;
@@ -192,10 +225,10 @@ export default class Game extends React.Component {
     if(who === 'player'){
       let newAnim = ['','','',''];
       newAnim[playerNum] = type;
-      this.setState({playerAnim: newAnim});
+      return this.setState({playerAnim: newAnim});
     }
     else if(who === 'enemy'){
-      this.setState({enemyAnim: type});
+      return this.setState({enemyAnim: type});
     }
   }
 
@@ -223,12 +256,12 @@ export default class Game extends React.Component {
   }
 
   componentDidMount() {
-    this.showStatus('danger!','red');
+    this.showStatus('dangerous!','red');
     this.phase = 1;
   }
 
   componentWillUnmount() {
-    // clearInterval(this.statusTimer);
+
   }
 
   render() {
@@ -265,20 +298,19 @@ export default class Game extends React.Component {
 
           <Info show={this.state.info.show} type={this.state.info.type} close={this.closeInfo} />
 
-          { this.state.action ? (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.tapArea}
-              onPress={()=>this.setState({action: false})} >
+          { this.state.action != '' ? (
 
-            </TouchableOpacity>
+            <Mech type={this.state.action} advance={this.advance} />
+
           ) : (
+
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.tapArea}
               onPress={()=>this.advance()} >
               <Text style={[styles.buttonText,{color:'aqua'}]}>tap to continue</Text>
             </TouchableOpacity>
+
           )}
 
         </View>
