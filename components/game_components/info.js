@@ -3,6 +3,10 @@ import { Modal, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from '../../styles';
 
+const INFO = {
+  defense5: 'There is no hope against this giant chicken.'
+}
+
 export default class Info extends React.Component {
   render() {
     return this.props.show ? (
@@ -14,7 +18,9 @@ export default class Info extends React.Component {
         >
         <TouchableOpacity onPress={()=>this.props.close()}>
           <View style={styles.modal}>
-            <Text>{this.props.type}</Text>
+            <Text style={{fontSize:24}}>Info</Text>
+            <Text style={{fontSize:20, textAlign:'center'}}>{INFO[this.props.type] || 'Do your best.'}</Text>
+            <Text style={{fontSize:18}}>Tap this window to close it.</Text>
           </View>
         </TouchableOpacity>
       </Modal>
