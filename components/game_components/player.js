@@ -3,16 +3,30 @@ import { Image, Animated } from 'react-native';
 
 import styles from '../../styles';
 
-const PLA_IMG = require('../../media/pc/1.png');
+const PLA_IMG = {
+    Knight: require('../../media/pc/1.png'),
+    Archer: require('../../media/pc/2.png'),
+    Mage: require('../../media/pc/3.png'),
+    Spearman: require('../../media/pc/4.png')
+  };
+const PLATK_IMG = {
+  Knight: require('../../media/pc/1a.png'),
+  Archer: require('../../media/pc/2a.png'),
+  Mage: require('../../media/pc/3a.png'),
+  Spearman: require('../../media/pc/4a.png')
+  };
 
 export default class Player extends React.Component {
   constructor(props) {
     super(props);
     this.moveValue = new Animated.Value(0);
     this.scaleValue = new Animated.Value(1);
-    this.targetValue = 120;
+    this.targetValue = 130;
     if(props.playerInd == 2 || props.playerInd == 3){
-      this.targetValue = 50;
+      this.targetValue = 60;
+    }
+    this.state = {
+      attack: false
     }
 
   }
@@ -29,10 +43,14 @@ export default class Player extends React.Component {
         toValue: 1.5,
         useNativeDriver: true
       })
-    ]).start(()=>this.props.requestAnim('player','',this.props.playerInd));
+    ]).start(()=>{
+      this.props.requestAnim('player','',this.props.playerInd);
+      this.setState({attack: true});
+    });
   }
 
   unattack = () => {
+    this.setState({attack: false});
     this.moveValue.setValue(this.targetValue);
     this.scaleValue.setValue(1.5);
     Animated.parallel([
@@ -59,7 +77,7 @@ export default class Player extends React.Component {
   render() {
     return (
       <Animated.Image
-        source={PLA_IMG}
+        source={this.state.attack? PLATK_IMG[this.props.playerType] : PLA_IMG[this.props.playerType] }
         style={{transform:[{translateX:this.moveValue},{scale:this.scaleValue}]}}
       >
       </Animated.Image>
