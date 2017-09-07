@@ -10,7 +10,11 @@ export default class Main extends React.Component {
       <View style={styles.container}>
         <View style={{flex:1, paddingTop:30}}>
 
-          <Text style={[styles.buttonText,styles.shadow,{color:'white'}]}>Select a difficulty</Text>
+          <TouchableOpacity>
+            <Link to="/game/5" replace component={TouchableOpacity}>
+              <Text style={[styles.buttonText,styles.shadow,{color:'white'}]}>Select a difficulty</Text>
+            </Link>
+          </TouchableOpacity>
 
         </View>
 
