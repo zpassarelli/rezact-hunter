@@ -113,7 +113,7 @@ export default class Game extends React.Component {
       damage = 1;
       playerArr = playerArr.slice(0,-1);
     }
-    else if(this.difficulty === 5){
+    if(this.difficulty === 5){
       damage = 4;
       playerArr = [];
     }
@@ -164,6 +164,7 @@ export default class Game extends React.Component {
       this.toggleMech('');
       this.dealDamage(detail);
       this.requestAnim('enemy','dmg');
+      this.requestAnim('player','unattack',this.currentPlayer);
       if(detail === 'good'){
         this.showStatus('good!','skyblue');
       }
@@ -186,7 +187,11 @@ export default class Game extends React.Component {
       this.phase = 0;
 
       this.showStatus('incoming..','red');
-      this.showInfo('defense' + this.difficulty);
+      if(this.difficulty === 5){
+        this.showInfo('Chicken Defense');
+      } else {
+        this.showInfo('Defense');
+      }
 
       this.phase = 5;
       return;
@@ -194,7 +199,7 @@ export default class Game extends React.Component {
     if(this.phase === 5) { //player defense begins
       this.phase = 0;
 
-      this.toggleMech('defense' + this.difficulty);
+      this.toggleMech('Defense');
 
       this.phase = 6;
       return;
@@ -300,7 +305,7 @@ export default class Game extends React.Component {
 
           { this.state.action != '' ? (
 
-            <Mech type={this.state.action} advance={this.advance} />
+            <Mech type={this.state.action} difficulty={this.difficulty} advance={this.advance} />
 
           ) : (
 
