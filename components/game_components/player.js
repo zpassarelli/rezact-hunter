@@ -25,9 +25,7 @@ export default class Player extends React.Component {
     if(props.playerInd == 2 || props.playerInd == 3){
       this.targetValue = 60;
     }
-    this.state = {
-      attack: false
-    }
+
 
   }
 
@@ -45,14 +43,12 @@ export default class Player extends React.Component {
       })
     ]).start(()=>{
       this.props.requestAnim('player','',this.props.playerInd);
-      this.setState({attack: true});
+      this.attk = true;
     });
   }
 
   unattack = () => {
-    this.setState({attack: false});
-    this.moveValue.setValue(this.targetValue);
-    this.scaleValue.setValue(1.5);
+    this.attk = false;
     Animated.parallel([
       Animated.timing(this.moveValue, {
         toValue: 0,
@@ -77,7 +73,7 @@ export default class Player extends React.Component {
   render() {
     return (
       <Animated.Image
-        source={this.state.attack? PLATK_IMG[this.props.playerType] : PLA_IMG[this.props.playerType] }
+        source={this.attk? PLATK_IMG[this.props.playerType] : PLA_IMG[this.props.playerType] }
         style={{transform:[{translateX:this.moveValue},{scale:this.scaleValue}]}}
       >
       </Animated.Image>
