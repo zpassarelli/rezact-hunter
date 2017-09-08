@@ -37,7 +37,6 @@ export default class Enemy extends React.Component {
   }
 
   attack = () => {
-    this.springValue.setValue(1.2);
     Animated.sequence([
       Animated.timing(this.springValue, {
         toValue: 3,
@@ -51,7 +50,6 @@ export default class Enemy extends React.Component {
   }
 
   dmg = () => {
-    this.squishValue.setValue(1);
     Animated.sequence([
       Animated.timing(this.squishValue, {
         toValue: 2,
@@ -65,7 +63,7 @@ export default class Enemy extends React.Component {
       })
     ]).start(()=>{
       this.props.requestAnim('enemy','')
-      this.props.requestAnim('player','unattack',this.props.playerInd);
+      // this.props.requestAnim('player','unattack');
     });
   }
 
