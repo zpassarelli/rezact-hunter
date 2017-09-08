@@ -1,5 +1,16 @@
 {
   "expo": {
-    "sdkVersion": "20.0.0"
+    "sdkVersion": "20.0.0",
+    "name":"ReZact Hunter",
+    "version":"0.8.0",
+    "icon":"./media/pc/1.png",
+    "slug":"rezact-hunter",
+    "orientation":"portrait",
+    "loading": {
+      "backgroundImage":"./media/bg.png"
+    },
+    "android": {
+      "package":"com.expo.rezacthunter"
+    }
   }
 }
