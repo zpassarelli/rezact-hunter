@@ -106,8 +106,16 @@ const styles = StyleSheet.create({
   },
   mech: {
     position: 'absolute',
-    top: height,
-    left: width/2
+    justifyContent:'flex-start',
+    alignItems:'flex-start',
+    width: width - 30,
+    top: -50,
+    height: 50,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderStyle:'dotted',
+    borderColor:'black',
+    borderWidth:5,
+    borderRadius:10
   }
 });
 
